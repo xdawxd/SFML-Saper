@@ -82,11 +82,7 @@ int MinesweeperBoard::countMines(int row, int col) const
     {
         for (int j = -1; j <= 1; ++j)
         {
-<<<<<<< HEAD
             if (((row + i) >= 0 && (row + i) < height) &&
-=======
-            if (((row + i) >= 0 && (row + i) < height)&&
->>>>>>> 3fa5cdec306c91c3b780b1b1819e9f826d9692b7
                 ((col +j) >=0 && (col + j) < width) &&
                 board[row + i][col + j].hasMine)
                 count++;
@@ -144,11 +140,7 @@ void MinesweeperBoard::revealField(int row, int col)
 
             board[row][col].hasMine = false;
             
-<<<<<<< HEAD
             while (!board[randRow][randCol].hasMine && row != randRow && col != randCol)
-=======
-            while (!board[randRow][randCol].hasMine)
->>>>>>> 3fa5cdec306c91c3b780b1b1819e9f826d9692b7
             {
                 board[randRow][randCol].hasMine = true;
                 break;
