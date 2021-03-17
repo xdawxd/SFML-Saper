@@ -44,14 +44,26 @@ void MinesweeperBoard::createDebugBoard()
     }
 }
 
+void MinesweeperBoard::placeRandomMine()
+{
+    int randRow = rand() % height;
+    int randCol = rand() % width;
+
+    if(board[randRow][randCol].hasMine)
+    {
+        placeRandomMine();
+    }
+    else
+    {
+        board[randRow][randCol].hasMine = true;
+    }
+}
+
 void MinesweeperBoard::createRandomBoard()
 {
     for (int mines = 0; mines < numOfMines; ++mines)
     {
-        int randRow = rand() % height;
-        int randCol = rand() % width;
-
-        board[randRow][randCol].hasMine = true;
+        placeRandomMine();
     }
 }
 
@@ -70,21 +82,21 @@ int MinesweeperBoard::getMineCount() const
     return numOfMines;
 }
 
-int MinesweeperBoard::countMines(int row, int col) const
+int MinesweeperBoard::countMines(int boardRow, int boardCol) const
 {
     int count = 0;
 
-    if (getFieldInfo(row, col) == '#' ||
-        !isRevealed(row, col))
+    if (getFieldInfo(boardRow, boardCol) == '#' ||
+        !isRevealed(boardRow, boardCol))
         return -1;
 
-    for (int i = -1; i <= 1; ++i)
+    for (int row = -1; row <= 1; ++row)
     {
-        for (int j = -1; j <= 1; ++j)
+        for (int col = -1; col <= 1; ++col)
         {
-            if (((row + i) >= 0 && (row + i) < height) &&
-                ((col +j) >=0 && (col + j) < width) &&
-                board[row + i][col + j].hasMine)
+            if (((boardRow + row) >= 0 && (boardRow + row) < height) &&
+                ((boardCol +col) >=0 && (boardCol + col) < width) &&
+                board[boardRow + row][boardCol + col].hasMine)
                 count++;
         }
     }
@@ -120,7 +132,7 @@ void MinesweeperBoard::toggleFlag(int row, int col)
 
 void MinesweeperBoard::revealField(int row, int col)
 {
-    Field field = board[row][row];
+    Field field = board[row][col];
 
     if (isRevealed(row, col) ||
         getFieldInfo(row, col) == '#'

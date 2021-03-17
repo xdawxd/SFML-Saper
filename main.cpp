@@ -12,7 +12,7 @@ int main()
     intro();
     srand(time(nullptr));
 
-    MinesweeperBoard mb(10, 10, DEBUG);
+    MinesweeperBoard mb(10, 10, NORMAL);
 
     mb.debugDisplay();
 }
