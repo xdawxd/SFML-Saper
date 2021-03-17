@@ -1,6 +1,35 @@
 #include "MinesweeperBoard.h"
 #include <iostream>
 
+void MinesweeperBoard::createDebugBoard()
+{
+    for (int row = 0; row < height; ++row)
+    {
+        for (int col = 0; col < width; ++col)
+        {
+            if (row == col || row == 0 || (col == 0 && row % 2 == 0))
+                board[row][col].hasMine = true;
+        }
+    }
+}
+
+void MinesweeperBoard::placeRandomMine()
+{
+    int randRow = rand() % height;
+    int randCol = rand() % width;
+
+    if (board[randRow][randCol].hasMine)
+        placeRandomMine();
+    else
+        board[randRow][randCol].hasMine = true;
+}
+
+void MinesweeperBoard::createRandomBoard()
+{
+    for (int mines = 0; mines < numOfMines; ++mines)
+        placeRandomMine();
+}
+
 MinesweeperBoard::MinesweeperBoard(int width, int height, GameMode mode)
 {
     this->width = width;
@@ -9,6 +38,14 @@ MinesweeperBoard::MinesweeperBoard(int width, int height, GameMode mode)
     int numOfMines = 0;
     state = RUNNING;
     firstAction = true;
+
+    for (int row = 0; row < height; ++row)
+    {
+        for (int col = 0; col < width; ++col)
+        {
+            board[row][col] = { 0, 0, 0 };
+        }
+    }
 
     switch (mode)
     {
@@ -26,39 +63,8 @@ MinesweeperBoard::MinesweeperBoard(int width, int height, GameMode mode)
         break;
     }
 
-    board[width][height] = {};
-
     this->numOfMines = numOfMines;
     createRandomBoard();
-}
-
-void MinesweeperBoard::createDebugBoard()
-{
-    for (int row = 0; row < height; ++row)
-    {
-        for (int col = 0; col < width; ++col)
-        {
-            if (row == col || row == 0 || (col == 0 && row % 2 == 0)) 
-                board[row][col].hasMine = true;
-        }
-    }
-}
-
-void MinesweeperBoard::placeRandomMine()
-{
-    int randRow = rand() % height;
-    int randCol = rand() % width;
-
-    if(board[randRow][randCol].hasMine)
-        placeRandomMine();
-    else
-        board[randRow][randCol].hasMine = true;
-}
-
-void MinesweeperBoard::createRandomBoard()
-{
-    for (int mines = 0; mines < numOfMines; ++mines)
-        placeRandomMine();
 }
 
 int MinesweeperBoard::getBoardWidth() const
@@ -81,7 +87,7 @@ int MinesweeperBoard::countMines(int boardRow, int boardCol) const
     int count = 0;
 
     if (getFieldInfo(boardRow, boardCol) == '#' ||
-        !isRevealed(boardRow, boardCol))
+        !board[boardRow][boardCol].isRevealed)
         return -1;
 
     for (int row = -1; row <= 1; ++row)
@@ -89,7 +95,7 @@ int MinesweeperBoard::countMines(int boardRow, int boardCol) const
         for (int col = -1; col <= 1; ++col)
         {
             if (((boardRow + row) >= 0 && (boardRow + row) < height) &&
-                ((boardCol +col) >=0 && (boardCol + col) < width) &&
+                ((boardCol + col) >= 0 && (boardCol + col) < width) &&
                 board[boardRow + row][boardCol + col].hasMine)
                 count++;
         }
@@ -99,58 +105,56 @@ int MinesweeperBoard::countMines(int boardRow, int boardCol) const
 
 bool MinesweeperBoard::hasFlag(int row, int col) const
 {
-    Field field = board[row][col];
-
-    if (field.hasFlag)
+    if (board[row][col].hasFlag)
         return true;
 
     if (getFieldInfo(row, col) == '#' ||
-        isRevealed(row, col) ||
-        !field.hasFlag)
+        board[row][col].isRevealed ||
+        !board[row][col].hasFlag)
         return false;
     return 0;
 }
 
 void MinesweeperBoard::toggleFlag(int row, int col)
 {
-    Field field = board[row][col];
-
-    if (isRevealed(row, col))
-        field.hasFlag = true;
-    
-    if (isRevealed(row, col) ||
+    if (board[row][col].isRevealed ||
         getFieldInfo(row, col) == '#' ||
-        getGameState() != RUNNING)
+        state != RUNNING)
         return;
+
+    if (!board[row][col].isRevealed)
+        board[row][col].hasFlag = true;
 }
 
 void MinesweeperBoard::revealField(int row, int col)
 {
-    Field field = board[row][col];
-
-    if (isRevealed(row, col) ||
+    if (board[row][col].isRevealed ||
         getFieldInfo(row, col) == '#'
-        || getGameState() != RUNNING ||
-        hasFlag(row, col))
+        || state != RUNNING ||
+        board[row][col].hasFlag)
         return;
 
-    if (!isRevealed(row, col) && !field.hasMine)
-        field.isRevealed = true;
+    if (!board[row][col].isRevealed && !board[row][col].hasMine)
+        board[row][col].isRevealed = true;
 
-    if (!isRevealed(row, col) && field.hasMine)
+    if (!board[row][col].isRevealed && board[row][col].hasMine)
     {
         if (firstAction && mode != DEBUG)
         {
-            int randRow = rand() % height;
-            int randCol = rand() % width;
-
             board[row][col].hasMine = false;
-            
-            while (!board[randRow][randCol].hasMine && row != randRow && col != randCol)
+
+            while (true)
             {
-                board[randRow][randCol].hasMine = true;
-                break;
+                int randRow = rand() % height;
+                int randCol = rand() % width;
+
+                if (!board[randRow][randCol].hasMine)
+                {
+                    board[randRow][randCol].hasMine = true;
+                    break;
+                }
             }
+            board[row][col].isRevealed = true;
             firstAction = false;
         }
     }
@@ -158,9 +162,7 @@ void MinesweeperBoard::revealField(int row, int col)
 
 bool MinesweeperBoard::isRevealed(int row, int col) const
 {
-    Field field = board[row][col];
-
-    if (field.isRevealed)
+    if (board[row][col].isRevealed)
         return true;
     return false;
 }
@@ -172,21 +174,19 @@ GameState MinesweeperBoard::getGameState() const
 
 char MinesweeperBoard::getFieldInfo(int row, int col) const
 {
-    Field field = board[row][col];
-
-    if (row < 0 || row >= height || col < 0 || col >= width) 
+    if (row < 0 || row >= height || col < 0 || col >= width)
         return '#';
 
-    if (!isRevealed(row, col) && hasFlag(row, col))
+    if (!board[row][col].isRevealed && board[row][col].hasFlag)
         return 'F';
 
-    if (!isRevealed(row, col) || !hasFlag(row, col))
+    if (!board[row][col].isRevealed || !board[row][col].hasFlag)
         return '_';
 
-    if (isRevealed(row, col) && field.hasMine)
+    if (board[row][col].isRevealed && board[row][col].hasMine)
         return 'x';
 
-    if (isRevealed(row, col) && countMines(row, col) > 1)
+    if (board[row][col].isRevealed && countMines(row, col) > 1)
         return countMines(row, col);
     return 0;
 }

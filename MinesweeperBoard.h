@@ -16,8 +16,8 @@ struct Field
 class MinesweeperBoard
 {
 	// this is just a hint; you are free to implement PRIVATE section in any way you want
+	void placeRandomMine();
 	void createRandomBoard();
-    void placeRandomMine();
 	void createDebugBoard();
 	Field board[100][100];
 	bool firstAction;
