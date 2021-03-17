@@ -50,21 +50,15 @@ void MinesweeperBoard::placeRandomMine()
     int randCol = rand() % width;
 
     if(board[randRow][randCol].hasMine)
-    {
         placeRandomMine();
-    }
     else
-    {
         board[randRow][randCol].hasMine = true;
-    }
 }
 
 void MinesweeperBoard::createRandomBoard()
 {
     for (int mines = 0; mines < numOfMines; ++mines)
-    {
         placeRandomMine();
-    }
 }
 
 int MinesweeperBoard::getBoardWidth() const
