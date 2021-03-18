@@ -16,6 +16,7 @@ struct Field
 class MinesweeperBoard
 {
 	// this is just a hint; you are free to implement PRIVATE section in any way you want
+	bool isOutside(int row, int col) const;
 	void placeRandomMine();
 	void createRandomBoard();
 	void createDebugBoard();
@@ -38,6 +39,7 @@ public:
 	// HINT: It is OK to allocate 100x100 board and only use part of it 
 	MinesweeperBoard(int width, int height, GameMode mode);
 	void debugDisplay() const;
+	bool hasMine(int row, int col) const;
 
 	// simple getters - return appropriate values (passed to or calculated in constructor)
 	int getBoardWidth() const;
