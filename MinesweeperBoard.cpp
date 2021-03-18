@@ -1,16 +1,22 @@
-#include "MinesweeperBoard.h"
 #include <iostream>
+
+#include "MinesweeperBoard.h"
 
 void MinesweeperBoard::createDebugBoard()
 {
+    int counter = 0;
     for (int row = 0; row < height; ++row)
     {
         for (int col = 0; col < width; ++col)
         {
             if (row == col || row == 0 || (col == 0 && row % 2 == 0))
+            {
                 board[row][col].hasMine = true;
+                counter++;
+            }
         }
     }
+    numOfMines = counter;
 }
 
 void MinesweeperBoard::placeRandomMine()
@@ -63,8 +69,11 @@ MinesweeperBoard::MinesweeperBoard(int width, int height, GameMode mode)
         break;
     }
 
-    this->numOfMines = numOfMines;
-    createRandomBoard();
+    if (mode != DEBUG)
+    {
+        this->numOfMines = numOfMines;
+        createRandomBoard();
+    }
 }
 
 int MinesweeperBoard::getBoardWidth() const
@@ -82,11 +91,18 @@ int MinesweeperBoard::getMineCount() const
     return numOfMines;
 }
 
+bool MinesweeperBoard::isOutside(int row, int col) const
+{
+    if (row < 0 || row >= height || col < 0 || col >= width)
+        return true;
+    return false;
+}
+
 int MinesweeperBoard::countMines(int boardRow, int boardCol) const
 {
     int count = 0;
 
-    if (getFieldInfo(boardRow, boardCol) == '#' ||
+    if (isOutside(boardRow, boardCol) ||
         !board[boardRow][boardCol].isRevealed)
         return -1;
 
@@ -103,12 +119,19 @@ int MinesweeperBoard::countMines(int boardRow, int boardCol) const
     return count;
 }
 
+bool MinesweeperBoard::hasMine(int row, int col) const
+{
+    if (board[row][col].hasMine)
+        return true;
+    return false;
+}
+
 bool MinesweeperBoard::hasFlag(int row, int col) const
 {
     if (board[row][col].hasFlag)
         return true;
 
-    if (getFieldInfo(row, col) == '#' ||
+    if (isOutside(row, col) ||
         board[row][col].isRevealed ||
         !board[row][col].hasFlag)
         return false;
@@ -118,7 +141,7 @@ bool MinesweeperBoard::hasFlag(int row, int col) const
 void MinesweeperBoard::toggleFlag(int row, int col)
 {
     if (board[row][col].isRevealed ||
-        getFieldInfo(row, col) == '#' ||
+        isOutside(row, col) ||
         state != RUNNING)
         return;
 
@@ -129,8 +152,8 @@ void MinesweeperBoard::toggleFlag(int row, int col)
 void MinesweeperBoard::revealField(int row, int col)
 {
     if (board[row][col].isRevealed ||
-        getFieldInfo(row, col) == '#'
-        || state != RUNNING ||
+        isOutside(row, col) ||
+        state != RUNNING ||
         board[row][col].hasFlag)
         return;
 
@@ -141,22 +164,13 @@ void MinesweeperBoard::revealField(int row, int col)
     {
         if (firstAction && mode != DEBUG)
         {
+            placeRandomMine();
             board[row][col].hasMine = false;
-
-            while (true)
-            {
-                int randRow = rand() % height;
-                int randCol = rand() % width;
-
-                if (!board[randRow][randCol].hasMine)
-                {
-                    board[randRow][randCol].hasMine = true;
-                    break;
-                }
-            }
-            board[row][col].isRevealed = true;
             firstAction = false;
         }
+        else
+            state = FINISHED_LOSS;
+        board[row][col].isRevealed = true;
     }
 }
 
@@ -169,12 +183,26 @@ bool MinesweeperBoard::isRevealed(int row, int col) const
 
 GameState MinesweeperBoard::getGameState() const
 {
-    return state;
+    if (state == FINISHED_LOSS)
+        return FINISHED_LOSS;
+
+    int fieldsLeft = 0;
+    for (int row = 0; row < height; ++row)
+    {
+        for (int col = 0; col < width; ++col)
+        {
+            if (!board[row][col].hasMine)
+                fieldsLeft++;
+        }
+    }
+    if (fieldsLeft == numOfMines)
+        return FINISHED_WIN;
+    return RUNNING;
 }
 
 char MinesweeperBoard::getFieldInfo(int row, int col) const
 {
-    if (row < 0 || row >= height || col < 0 || col >= width)
+    if (isOutside(row, col))
         return '#';
 
     if (!board[row][col].isRevealed && board[row][col].hasFlag)
