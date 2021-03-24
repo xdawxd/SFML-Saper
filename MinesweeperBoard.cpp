@@ -215,7 +215,7 @@ char MinesweeperBoard::getFieldInfo(int row, int col) const
         return 'x';
 
     if (board[row][col].isRevealed)
-        return static_cast<char>(countMines(row, col));
+        return '0' + countMines(row, col);
     return ' ';
 }
 
