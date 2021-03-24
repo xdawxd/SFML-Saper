@@ -29,6 +29,7 @@ int main()
 
     board.revealField(1, 2);
     view.display();
+    
 
     //------------------------------------------------
 
@@ -44,4 +45,5 @@ int main()
 
     board.revealField(0, 3);
     view.display();
+    
 }

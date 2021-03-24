@@ -93,7 +93,7 @@ int MinesweeperBoard::getMineCount() const
 
 bool MinesweeperBoard::isOutside(int row, int col) const
 {
-    if (row < 0 || row >= height || col < 0 || col >= width)
+    if (row < 0 || row > height || col < 0 || col > width)
         return true;
     return false;
 }
@@ -191,11 +191,11 @@ GameState MinesweeperBoard::getGameState() const
     {
         for (int col = 0; col < width; ++col)
         {
-            if (!board[row][col].hasMine)
+            if (!board[row][col].hasMine && !board[row][col].isRevealed)
                 fieldsLeft++;
         }
     }
-    if (fieldsLeft == numOfMines)
+    if (fieldsLeft == 0)
         return FINISHED_WIN;
     return RUNNING;
 }
@@ -214,9 +214,9 @@ char MinesweeperBoard::getFieldInfo(int row, int col) const
     if (board[row][col].isRevealed && board[row][col].hasMine)
         return 'x';
 
-    if (board[row][col].isRevealed && countMines(row, col) > 1)
-        return countMines(row, col);
-    return 0;
+    if (board[row][col].isRevealed)
+        return '0' + countMines(row, col);
+    return ' ';
 }
 
 void MinesweeperBoard::debugDisplay() const
