@@ -5,8 +5,8 @@
 
 class MSBoardTextView
 {
+    int height;
 	int width;
-	int height;
 	GameState state;
 	MinesweeperBoard& displayableBoard;
 

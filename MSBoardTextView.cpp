@@ -16,8 +16,8 @@ void MSBoardTextView::display()
     {
         for (int col = 0; col < width; ++col)
         {
-            if (!displayableBoard.isRevealed(row, col))
-                std::cout << " 🔳 ";
+            if (displayableBoard.hasFlag(row, col))
+                std::cout << " ⛳ ";
 
             else if (displayableBoard.hasMine(row, col) && displayableBoard.isRevealed(row, col))
             {
@@ -33,8 +33,8 @@ void MSBoardTextView::display()
                     std::cout << " " << displayableBoard.countMines(row, col) << " ";
             }
 
-            else if (displayableBoard.hasFlag(row, col))
-                std::cout << " ⛳ ";
+            else if (!displayableBoard.isRevealed(row, col))
+                std::cout << " 🔳 ";
         }
         std::cout << std::endl;
     }
