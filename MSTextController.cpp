@@ -18,6 +18,9 @@ void MSTextController::play()
     {
         playerView.display();
 
+        if (playerBoard.getGameState() != RUNNING)
+            break;
+
         int row, col;
         char choice;
 
@@ -28,8 +31,5 @@ void MSTextController::play()
 
         else if ((char)tolower(choice) == 'f')
             playerBoard.toggleFlag(row, col);
-
-        else if (choice == 'x')
-            break;
     }
 }
