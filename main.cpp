@@ -15,43 +15,9 @@ int main()
     intro();
     srand(time(nullptr));
 
-    MinesweeperBoard board(10, 10, DEBUG);
+    MinesweeperBoard board(5, 5, NORMAL);
     MSBoardTextView view(board);
     MSTextController ctrl(board, view);
 
     ctrl.play();
-
-
-    // //------------------------------------------------
-
-    // board.debugDisplay();
-
-    // //------------------------------------------------
-
-    // view.display();
-
-    // //------------------------------------------------
-
-    // board.revealField(1, 2);
-    // view.display();
-
-    // //------------------------------------------------
-
-    // board.toggleFlag(1, 0);
-    // view.display();
-
-    // //------------------------------------------------
-
-    // board.revealField(1, 5);
-    // view.display();
-
-    // //------------------------------------------------
-
-    // board.revealField(3, 7);
-    // view.display();
-
-    // //------------------------------------------------
-
-    // board.revealField(0, 3);
-    // view.display();
 }

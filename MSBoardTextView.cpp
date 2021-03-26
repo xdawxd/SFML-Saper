@@ -6,35 +6,33 @@ MSBoardTextView::MSBoardTextView(MinesweeperBoard& board) : displayableBoard(boa
 {
     height = board.getBoardHeight();
     width = board.getBoardWidth();
-    state = board.getGameState();
 }
 
 void MSBoardTextView::display()
 {
+    GameState state = displayableBoard.getGameState();
+
     std::cout << std::endl;
     for (int row = 0; row < height; ++row)
     {
         for (int col = 0; col < width; ++col)
         {
-            if (displayableBoard.hasFlag(row, col))
+            char info = displayableBoard.getFieldInfo(row, col);
+
+            if (info == 'F')
                 std::cout << " ⛳ ";
 
-            else if (displayableBoard.hasMine(row, col) && displayableBoard.isRevealed(row, col))
-            {
+            else if (info == 'x')
                 std::cout << " 💥 ";
-                state = FINISHED_LOSS;
-            }
 
-            else if (displayableBoard.isRevealed(row, col))
-            {
-                if (displayableBoard.countMines(row, col) == 0)
-                    std::cout << " 🔲 ";
-                else
-                    std::cout << " " << displayableBoard.countMines(row, col) << " ";
-            }
-
-            else if (!displayableBoard.isRevealed(row, col))
+            else if (info == '_')
                 std::cout << " 🔳 ";
+
+            else if (info == '0')
+                std::cout << " 🔲 ";
+
+            else
+                std::cout << " " << info << " ";
         }
         std::cout << std::endl;
     }
