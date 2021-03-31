@@ -11,9 +11,13 @@ playerBoard(board), playerView(view)
 
 void MSTextController::play()
 {
-    // f or F - Flag
-    // r or R - Reveal
+    std::cout << "--------------------------------------------------------------" << std::endl;
     std::cout << "Specify the row, column and an action separated by a spacebar." << std::endl;
+    std::cout << "for example:" << std::endl;
+    std::cout << "2 2 r - will reveal the filed at row = 2, column = 2" << std::endl;
+    std::cout << "1 3 f - will place a flag at row = 1, column = 3" << std::endl;
+    std::cout << "Not existing field will throw an error" << std::endl;
+    std::cout << "--------------------------------------------------------------" << std::endl;
     while (true)
     {
         playerView.display();
@@ -26,7 +30,10 @@ void MSTextController::play()
 
         std::cin >> row >> col >> choice;
 
-        if ((char)tolower(choice) == 'r')
+        if (playerBoard.getFieldInfo(row, col))
+            std::cout << "No such field" << std::endl;
+
+        else if ((char)tolower(choice) == 'r')
             playerBoard.revealField(row, col);
 
         else if ((char)tolower(choice) == 'f')
