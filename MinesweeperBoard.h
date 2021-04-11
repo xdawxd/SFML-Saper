@@ -4,6 +4,8 @@
 enum GameMode { DEBUG, EASY, NORMAL, HARD };
 enum GameState { RUNNING, FINISHED_WIN, FINISHED_LOSS };
 
+#include "Array2D.h"
+
 // HINT
 struct Field
 {
@@ -20,7 +22,7 @@ class MinesweeperBoard
 	void placeRandomMine();
 	void createRandomBoard();
 	void createDebugBoard();
-	Field board[100][100];
+	Array2D<Field> board{100, 100};
 	bool firstAction;
 	GameState state;
 	GameMode mode;

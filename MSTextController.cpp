@@ -30,7 +30,7 @@ void MSTextController::play()
 
         std::cin >> row >> col >> choice;
 
-        if (playerBoard.getFieldInfo(row, col))
+        if (playerBoard.getFieldInfo(row, col) == '#')
             std::cout << "No such field" << std::endl;
 
         else if ((char)tolower(choice) == 'r')
