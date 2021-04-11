@@ -363,3 +363,8 @@ FodyWeavers.xsd
 
 build/
 main
+
+*.sln
+*.vcxproj*
+
+*.dll
