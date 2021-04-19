@@ -110,7 +110,8 @@ int MinesweeperBoard::countMines(int boardRow, int boardCol) const
     {
         for (int col = -1; col <= 1; ++col)
         {
-            if (!isOutside(row, col) &&
+            if (((boardRow + row) >= 0 && (boardRow + row) < height) &&
+                ((boardCol + col) >= 0 && (boardCol + col) < width) &&
                 board[boardRow + row][boardCol + col].hasMine)
                 count++;
         }

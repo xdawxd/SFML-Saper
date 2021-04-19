@@ -1,6 +1,7 @@
 #ifndef MSSFMLVIEW_H__
 #define MSSFMLVIEW_H__
 
+#include <string>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
@@ -12,6 +13,8 @@ class MSSFMLView
 	int width;
 	int screen_height;
 	int screen_width;
+	sf::Color numberColor(sf::Text text);
+	sf::RectangleShape shadow(sf::RectangleShape rec, sf::Color color);
 	MinesweeperBoard& displayableBoard;
 
 public:

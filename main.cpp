@@ -12,22 +12,11 @@ void intro()
     std::cout << "Dawid (----39)" << "\n";
     std::cout << "Grupa: Sroda 13:15 (MW)" << "\n" << "\n";
 }
-/*
+
 int main()
 {
-    intro();
     srand(time(nullptr));
 
-    MinesweeperBoard board(5, 5, NORMAL);
-    MSBoardTextView view(board);
-    MSTextController ctrl(board, view);
-
-    ctrl.play();
-}
-*/
-
-int main()
-{
     constexpr int screen_width = 800;
     constexpr int screen_height = 600;
 
@@ -37,8 +26,10 @@ int main()
     MSSFMLView view(board);  // przekazujemy przez referencje plansze jako argument konstruktora
 
     // symulujemy rozgrywke
-    board.toggleFlag(0, 0);
-    board.revealField(2, 3);
+    board.revealField(1, 0);
+    board.revealField(3, 0);
+    board.revealField(9, 2);
+    board.toggleFlag(3, 2);
 
     // rysujemy
     while (window.isOpen())
@@ -49,10 +40,10 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-
+        
         // obsluga zdarzen
         //
-        window.clear();
+        window.clear(sf::Color(50, 55, 60));
         view.draw(window);   // wywolujemy funkcje draw i dostarczamy jej okno na ktorym ma odbyc sie rysowanie
         window.display();
     }
