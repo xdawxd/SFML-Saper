@@ -36,23 +36,8 @@ void MinesweeperBoard::createRandomBoard()
         placeRandomMine();
 }
 
-MinesweeperBoard::MinesweeperBoard(int width, int height, GameMode mode)
+void MinesweeperBoard::chooseDifficulty()
 {
-    this->width = width;
-    this->height = height;
-    this->mode = mode;
-    int numOfMines = 0;
-    state = RUNNING;
-    firstAction = true;
-
-    for (int row = 0; row < height; ++row)
-    {
-        for (int col = 0; col < width; ++col)
-        {
-            board[row][col] = { 0, 0, 0 };
-        }
-    }
-
     switch (mode)
     {
     case EASY:
@@ -74,6 +59,26 @@ MinesweeperBoard::MinesweeperBoard(int width, int height, GameMode mode)
         this->numOfMines = numOfMines;
         createRandomBoard();
     }
+}
+
+MinesweeperBoard::MinesweeperBoard(int width, int height, GameMode mode)
+{
+    this->width = width;
+    this->height = height;
+    this->mode = mode;
+    int numOfMines = 0;
+    state = RUNNING;
+    firstAction = true;
+
+    for (int row = 0; row < height; ++row)
+    {
+        for (int col = 0; col < width; ++col)
+        {
+            board[row][col] = { 0, 0, 0 };
+        }
+    }
+
+    chooseDifficulty();
 }
 
 int MinesweeperBoard::getBoardWidth() const
@@ -239,4 +244,27 @@ void MinesweeperBoard::debugDisplay() const
         }
         std::cout << std::endl;
     }
+}
+
+void MinesweeperBoard::clearBoard()
+{
+    for (int row = 0; row < height; ++row)
+    {
+        for (int col = 0; col < width; ++col)
+        {
+            board[row][col] = { 0, 0, 0 };
+        }
+    }
+    std::cout << "Board cleared" << std::endl;
+
+    createRandomBoard();
+    firstAction = true;
+}
+
+void MinesweeperBoard::setDifficulty(GameMode mode)
+{
+    clearBoard();
+    this->mode = mode;
+    chooseDifficulty();
+    std::cout << "Game mode changed to: " << mode << std::endl;
 }
