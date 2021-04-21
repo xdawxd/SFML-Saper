@@ -16,11 +16,11 @@ class MSSFMLView
 	GameMode mode;
 	MinesweeperBoard& displayableBoard;
 	sf::RectangleShape addShadow(sf::RectangleShape field);
-	sf::Text displayText(std::string str, int fontSize, sf::Font font, sf::RectangleShape& rect);
-	void createClock();
-	sf::RectangleShape createNewGameBox();
-	sf::RectangleShape createDifficultues();
-	sf::RectangleShape authorBox();
+	//sf::Text displayText(std::string str, int fontSize, sf::Font font, sf::RectangleShape& rect);
+	void displayInfo(std::string str, sf::Font font, sf::RenderWindow& win);
+	void createNewGameBox();
+	void createDifficultues();
+	void authorBox();
 
 public:
 	MSSFMLView(MinesweeperBoard& board);

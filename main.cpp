@@ -50,11 +50,10 @@ int main()
                 {
                 case sf::Mouse::Left:
                     board.revealField(row, col);
-                    std::cout << event.mouseButton.x << " " << event.mouseButton.y << std::endl;
 
                     if ((x >= 560 && x <= 760) && (y >= 120 && y <= 195))
                     {
-                        board.clearBoard();
+                        board.setBoard();
                         board.debugDisplay();
                     }
 

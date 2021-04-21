@@ -13,6 +13,22 @@ sf::RectangleShape MSSFMLView::addShadow(sf::RectangleShape field)
 	return shadow;
 }
 
+void MSSFMLView::displayInfo(std::string str, sf::Font font, sf::RenderWindow& win)
+{
+	sf::Text text(str, font, 36);
+	
+	if (str == "You Won!")
+		text.setFillColor(sf::Color(32, 122, 56));
+	else if (str == "You lost!")
+		text.setFillColor(sf::Color(122, 32, 32));
+	else
+		text.setFillColor(sf::Color(0, 0, 0, 192));
+
+	text.setPosition(80, 60);
+	win.draw(text);
+
+}
+
 MSSFMLView::MSSFMLView(MinesweeperBoard& board) : displayableBoard(board)
 {
 	height = board.getBoardHeight();
@@ -61,9 +77,6 @@ void MSSFMLView::draw(sf::RenderWindow& win)
 				text.setFillColor(sf::Color::Black);
 				field.setFillColor(sf::Color::White);
 			}
-
-			sf::Event event;
-			if (event.MouseButtonPressed)
 
 			field.setPosition(posX, posY);
 
@@ -149,6 +162,15 @@ void MSSFMLView::draw(sf::RenderWindow& win)
 	win.draw(authorText);
 
 	if (state != RUNNING)
-		state == FINISHED_WIN ? std::cout << "\nYOU WIN\n" : std::cout << "\nYOU LOSE\n";
+	{
+		if (state == FINISHED_WIN)
+			displayInfo("You Won!", font, win);
+		else
+			displayInfo("You Lost!", font, win);
+	}
+	else
+	{
+		displayInfo("MINESWEEPER", font, win);
+	}
 }
 

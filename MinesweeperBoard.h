@@ -42,7 +42,7 @@ public:
 	// HINT: It is OK to allocate 100x100 board and only use part of it 
 	MinesweeperBoard(int width, int height, GameMode mode);
 	void debugDisplay() const;
-	void clearBoard();
+	void setBoard();
 	void setDifficulty(GameMode mode);
 	bool hasMine(int row, int col) const;
 

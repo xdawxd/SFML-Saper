@@ -246,7 +246,7 @@ void MinesweeperBoard::debugDisplay() const
     }
 }
 
-void MinesweeperBoard::clearBoard()
+void MinesweeperBoard::setBoard()
 {
     for (int row = 0; row < height; ++row)
     {
@@ -259,12 +259,14 @@ void MinesweeperBoard::clearBoard()
 
     createRandomBoard();
     firstAction = true;
+    state = RUNNING;
 }
 
 void MinesweeperBoard::setDifficulty(GameMode mode)
 {
-    clearBoard();
+    state = RUNNING;
     this->mode = mode;
     chooseDifficulty();
+    setBoard();
     std::cout << "Game mode changed to: " << mode << std::endl;
 }
