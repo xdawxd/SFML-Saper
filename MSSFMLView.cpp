@@ -19,7 +19,7 @@ void MSSFMLView::displayInfo(std::string str, sf::Font font, sf::RenderWindow& w
 	
 	if (str == "You Won!")
 		text.setFillColor(sf::Color(32, 122, 56));
-	else if (str == "You lost!")
+	else if (str == "You Lost!")
 		text.setFillColor(sf::Color(122, 32, 32));
 	else
 		text.setFillColor(sf::Color(0, 0, 0, 192));
