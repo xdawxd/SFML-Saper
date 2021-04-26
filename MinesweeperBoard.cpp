@@ -107,9 +107,8 @@ int MinesweeperBoard::countMines(int boardRow, int boardCol) const
 {
     int count = 0;
 
-    if (isOutside(boardRow, boardCol) ||
-        !board[boardRow][boardCol].isRevealed)
-        return -1;
+    if (isOutside(boardRow, boardCol)) return -1;
+    if(!board[boardRow][boardCol].isRevealed) return -1;
 
     for (int row = -1; row <= 1; ++row)
     {
@@ -136,18 +135,19 @@ bool MinesweeperBoard::hasFlag(int row, int col) const
     if (board[row][col].hasFlag)
         return true;
 
-    if (isOutside(row, col) ||
-        board[row][col].isRevealed ||
-        !board[row][col].hasFlag)
+    if (isOutside(row, col)) return false;
+    if (board[row][col].isRevealed || board[row][col].hasFlag)
         return false;
     return 0;
 }
 
 void MinesweeperBoard::toggleFlag(int row, int col)
 {
-    if (isOutside(row, col) ||
-        board[row][col].isRevealed ||
-        state != RUNNING)
+    if (state != RUNNING) return;
+
+    if (isOutside(row, col)) return;
+
+    if (board[row][col].isRevealed)
         return;
 
     if (!board[row][col].isRevealed && !board[row][col].hasFlag)
@@ -159,10 +159,9 @@ void MinesweeperBoard::toggleFlag(int row, int col)
 
 void MinesweeperBoard::revealField(int row, int col)
 {
-    if (isOutside(row, col) ||
-        board[row][col].isRevealed ||
-        state != RUNNING ||
-        board[row][col].hasFlag)
+    if (state != RUNNING) return;
+    if (isOutside(row, col)) return;
+    if (board[row][col].isRevealed || board[row][col].hasFlag)
         return;
 
     if (!board[row][col].isRevealed && !board[row][col].hasMine)
