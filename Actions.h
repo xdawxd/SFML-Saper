@@ -10,18 +10,12 @@ class Actions
 {
 	MinesweeperBoard& board;
 	MSSFMLView& view;
-	sf::RenderWindow win;
-	sf::Event event;
-	int row;
-	int col;
-	int x;
-	int y;
 
 public:
-	Actions(MinesweeperBoard& board, sf::Event event, MSSFMLView& view);
-	void lmbPressed() const;
-	void rmbPressed() const;
-	void addEvents() const;
+	Actions(MinesweeperBoard& board, MSSFMLView& view);
+	void lmbPressed(sf::Event& event) const;
+	void rmbPressed(sf::Event& event) const;
+	void addEvents(sf::Event& event) const;
 };
 
 #endif

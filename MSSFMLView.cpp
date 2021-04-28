@@ -31,6 +31,7 @@ void MSSFMLView::drawNumber(sf::RenderWindow& win, char number, int x, int y)
 
 void MSSFMLView::displayInfo(GameState state, sf::Font font, sf::RenderWindow& win)
 {
+	state = displayableBoard.getGameState();
 	sf::Text text;
 	
 	switch (state)
@@ -57,15 +58,12 @@ void MSSFMLView::displayInfo(GameState state, sf::Font font, sf::RenderWindow& w
 
 MSSFMLView::MSSFMLView(MinesweeperBoard& board) : displayableBoard(board)
 {
-	firstAction = true;
-	revealAm = width * height;
 	height = board.getBoardHeight();
 	width = board.getBoardWidth();
 }
 
 void MSSFMLView::draw(sf::RenderWindow& win)
 {
-	state = displayableBoard.getGameState();
 	screen_height = win.getSize().x;
 	screen_width = win.getSize().y;
 	int space = 40;
@@ -92,17 +90,14 @@ void MSSFMLView::draw(sf::RenderWindow& win)
 			else if (info == '_')
 				field.setFillColor(sf::Color::White);
 
-			else if (info == '0')
+			else if (isdigit(info))
 			{
-				field.setFillColor(sf::Color(115, 199, 255));
+				field.setFillColor(sf::Color(140, 140, 140));
 			}
 			else
 				field.setFillColor(sf::Color::White);
 
 			field.setPosition(posX, posY);
-
-			//revealAmount();
-			//floodFill(row, col);
 
 			win.draw(field);
 			win.draw(addShadow(field));
@@ -192,63 +187,22 @@ void MSSFMLView::draw(sf::RenderWindow& win)
 	displayInfo(state, font, win);
 }
 
-void MSSFMLView::revealAmount()
+void MSSFMLView::floodFill(int row, int col)
 {
-	if (firstAction && (mode == EASY || mode == NORMAL))
-		revealAm *= 0.4;
-	else if (firstAction && mode == HARD)
-		revealAm *= 0.2;
-	else if (revealAm < 1)
-		revealAm = 1;
-	else
-		revealAm /= 2;
-}
-
-/*
-void MSSFMLView::revealAround(int row, int col, int x, int y, sf::RenderWindow& win)
-{
-	if (isValidField(row, col)) return;
-
-	for (int aRow = -1; aRow <= 1; ++aRow)
-	{
-		for (int aCol = -1; aCol <= 1; ++aCol)
-		{
-			int currRow = row + aRow;
-			int currCol = col + aCol;
-			char info = displayableBoard.getFieldInfo(currRow, currCol);
-
-			if (isValidField(currRow, currCol) &&
-				isdigit(displayableBoard.getFieldInfo(currRow, currCol)) &&
-				info != '0')
-			{
-				drawNumber(win, info, x, y);
-			}
-		}
-	}
-}
-*/
-
-// brak mozliwosci odkrycia pola z mina
-// algorytm niepoprawnie obniza wartosc licznika przez co odkrywa sie cala plansza
-void MSSFMLView::floodFill(int row, int col, int counter)
-{
-
 	if (displayableBoard.getFieldInfo(row, col) == '#')
 		return;
 
-	if (!displayableBoard.isRevealed(row, col) &&
-		!displayableBoard.hasFlag(row, col) &&
-		!displayableBoard.hasMine(row, col) &&
-		revealAm > 1)
+	if (displayableBoard.countMines(row, col) == 0)
 	{
+		std::cout << row << " " << col << std::endl;
 		displayableBoard.revealField(row, col);
-		floodFill(row - 1, col, revealAm--);
-		floodFill(row + 1, col, revealAm--);
-		floodFill(row, col + 1, revealAm--);
-		floodFill(row, col - 1, revealAm--);
+		floodFill(row + 1, col);
+		floodFill(row - 1, col);
+		floodFill(row, col - 1);
+		floodFill(row, col + 1);
+		floodFill(row + 1, col - 1);
+		floodFill(row - 1, col - 1);
+		floodFill(row + 1, col + 1);
+		floodFill(row - 1, col + 1);
 	}
-	else if (revealAm == 1)
-		displayableBoard.revealField(row, col);
-	else
-		return;
 }

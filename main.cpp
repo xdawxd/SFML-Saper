@@ -25,6 +25,7 @@ int main()
 
     MinesweeperBoard board(10, 10, EASY);
     MSSFMLView view(board);  // przekazujemy przez referencje plansze jako argument konstruktora
+    Actions actions(board, view);
 
     board.debugDisplay();
 
@@ -34,8 +35,6 @@ int main()
         sf::Event event;
         while (window.pollEvent(event))
         {
-            Actions actions(board, event, view);
-
             switch (event.type)
             {
             case sf::Event::Closed:
@@ -46,13 +45,13 @@ int main()
                 switch (event.key.code)
                 {
                 case sf::Mouse::Left:
-                    actions.lmbPressed();
+                    actions.lmbPressed(event);
 
-                    actions.addEvents();
+                    actions.addEvents(event);
 
                     break;
                 case sf::Mouse::Right:
-                    actions.rmbPressed();
+                    actions.rmbPressed(event);
                     break;
                 }
                 break;

@@ -1,15 +1,14 @@
 #include "Actions.h"
 
-Actions::Actions(MinesweeperBoard& board, sf::Event event, MSSFMLView& view) : board(board), event(event), view(view)
+Actions::Actions(MinesweeperBoard& board, MSSFMLView& view) : board(board), view(view)
 {
-    row = event.mouseButton.y / 40 - 3;
-    col = event.mouseButton.x / 40 - 2;
-    x = event.mouseButton.x;
-    y = event.mouseButton.y;
 }
 
-void Actions::addEvents() const
+void Actions::addEvents(sf::Event& event) const
 {
+    int x = event.mouseButton.x;
+    int y = event.mouseButton.y;
+
     if ((x >= 560 && x <= 760) && (y >= 120 && y <= 195))
     {
         board.setBoard();
@@ -35,13 +34,20 @@ void Actions::addEvents() const
     }
 }
 
-void Actions::lmbPressed() const
+void Actions::lmbPressed(sf::Event& event) const
 {
-    view.revealAmount();
+    int row = event.mouseButton.y / 40 - 3;
+    int col = event.mouseButton.x / 40 - 2;
+
+    board.revealField(row, col);
     view.floodFill(row, col);
+    std::cout << "\n" << board.countMines(row, col) << std::endl;
 }
 
-void Actions::rmbPressed() const
+void Actions::rmbPressed(sf::Event& event) const
 {
+    int row = event.mouseButton.y / 40 - 3;
+    int col = event.mouseButton.x / 40 - 2;
+
 	board.toggleFlag(row, col);
 }

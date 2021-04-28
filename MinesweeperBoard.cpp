@@ -125,6 +125,9 @@ int MinesweeperBoard::countMines(int boardRow, int boardCol) const
 
 bool MinesweeperBoard::hasMine(int row, int col) const
 {
+    if (isOutside(row, col))
+        return false;
+
     if (board[row][col].hasMine)
         return true;
     return false;
@@ -132,10 +135,11 @@ bool MinesweeperBoard::hasMine(int row, int col) const
 
 bool MinesweeperBoard::hasFlag(int row, int col) const
 {
+    if (isOutside(row, col)) return false;
+
     if (board[row][col].hasFlag)
         return true;
-
-    if (isOutside(row, col)) return false;
+    
     if (board[row][col].isRevealed || board[row][col].hasFlag)
         return false;
     return 0;

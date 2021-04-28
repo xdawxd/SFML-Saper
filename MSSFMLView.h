@@ -11,8 +11,6 @@ class MSSFMLView
 	int width;
 	int screen_height;
 	int screen_width;
-	bool firstAction;
-	int revealAm;
 	GameMode mode;
 	GameState state;
 	MinesweeperBoard& displayableBoard;
@@ -23,8 +21,8 @@ class MSSFMLView
 public:
 	MSSFMLView(MinesweeperBoard& board);
 	void draw(sf::RenderWindow& win);
-	void revealAmount();
-	void floodFill(int row, int col, int counter = 0);
+	void clearMovesCounter();
+	void floodFill(int row, int col);
 };
 
 #endif
