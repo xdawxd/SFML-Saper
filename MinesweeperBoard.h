@@ -30,6 +30,8 @@ class MinesweeperBoard
 	int numOfMines;
 	int width;
 	int height;
+	int revealAm;
+	int moves;
 
 public:
 	// generate a width*height sized board with the number of mines that depend on GameMode:
@@ -43,6 +45,9 @@ public:
 	MinesweeperBoard(int width, int height, GameMode mode);
 	void debugDisplay() const;
 	void setBoard();
+	void revealAmount();
+	void countMoves();
+	void clearMoves();
 	void setDifficulty(GameMode mode);
 	void floodFill(int row, int col);
 	bool hasMine(int row, int col) const;

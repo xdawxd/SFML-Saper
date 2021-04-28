@@ -66,6 +66,8 @@ MinesweeperBoard::MinesweeperBoard(int width, int height, GameMode mode)
     this->width = width;
     this->height = height;
     this->mode = mode;
+
+    moves = 0;
     int numOfMines = 0;
     state = RUNNING;
     firstAction = true;
@@ -274,21 +276,67 @@ void MinesweeperBoard::setDifficulty(GameMode mode)
     std::cout << "Game mode changed to: " << mode << std::endl;
 }
 
+void MinesweeperBoard::countMoves()
+{
+    moves++;
+}
+void MinesweeperBoard::clearMoves()
+{
+    moves = 0;
+}
+
+void MinesweeperBoard::revealAmount()
+{
+    if (state == EASY || state == NORMAL)
+        revealAm = rand() % 50 + 30;
+    else
+        revealAm = rand() % 30 + 10;
+
+    if (moves > 3)
+        revealAm = rand() % 2;
+}
+
 void MinesweeperBoard::floodFill(int row, int col)
 {
     if (isOutside(row, col))
         return;
 
-    if (countMines(row, col) == 0)
+    if (getFieldInfo(row, col) == '_' &&
+        !hasMine(row, col) && 
+        revealAm > 0)
     {
+        revealAm--;
         revealField(row, col);
+        floodFill(row + 1, col);
+        floodFill(row, col - 1);
+        floodFill(row - 1, col);
+        floodFill(row, col + 1);
+    }
+    else
+        return;
+}
+
+
+/*
+void MinesweeperBoard::floodFill(int row, int col)
+{
+    if (isOutside(row, col))
+        return;
+
+    if (getFieldInfo(row, col) == '_' &&
+        !hasMine(row, col))
+    {
+        std::cout << row << " " << col << std::endl;
         floodFill(row + 1, col);
         floodFill(row - 1, col);
         floodFill(row, col - 1);
         floodFill(row, col + 1);
-        floodFill(row + 1, col - 1);
-        floodFill(row - 1, col - 1);
-        floodFill(row + 1, col + 1);
-        floodFill(row - 1, col + 1);
     }
+    else
+        return;
+    //floodFill(row + 1, col - 1);
+    //floodFill(row - 1, col - 1);
+    //floodFill(row + 1, col + 1);
+    //floodFill(row - 1, col + 1);
 }
+*/
