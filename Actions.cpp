@@ -40,8 +40,9 @@ void Actions::lmbPressed(sf::Event& event) const
     int col = event.mouseButton.x / 40 - 2;
 
     board.revealField(row, col);
-    view.floodFill(row, col);
-    std::cout << "\n" << board.countMines(row, col) << std::endl;
+    std::cout << row << " " << col << std::endl;
+    board.floodFill(row, col);
+    //std::cout << "\n" << board.countMines(row, col) << std::endl;
 }
 
 void Actions::rmbPressed(sf::Event& event) const

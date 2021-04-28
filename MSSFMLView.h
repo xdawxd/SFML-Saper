@@ -21,8 +21,6 @@ class MSSFMLView
 public:
 	MSSFMLView(MinesweeperBoard& board);
 	void draw(sf::RenderWindow& win);
-	void clearMovesCounter();
-	void floodFill(int row, int col);
 };
 
 #endif

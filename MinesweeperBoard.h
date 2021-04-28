@@ -44,6 +44,7 @@ public:
 	void debugDisplay() const;
 	void setBoard();
 	void setDifficulty(GameMode mode);
+	void floodFill(int row, int col);
 	bool hasMine(int row, int col) const;
 
 	// simple getters - return appropriate values (passed to or calculated in constructor)

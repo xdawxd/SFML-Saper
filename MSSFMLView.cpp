@@ -186,23 +186,3 @@ void MSSFMLView::draw(sf::RenderWindow& win)
 
 	displayInfo(state, font, win);
 }
-
-void MSSFMLView::floodFill(int row, int col)
-{
-	if (displayableBoard.getFieldInfo(row, col) == '#')
-		return;
-
-	if (displayableBoard.countMines(row, col) == 0)
-	{
-		std::cout << row << " " << col << std::endl;
-		displayableBoard.revealField(row, col);
-		floodFill(row + 1, col);
-		floodFill(row - 1, col);
-		floodFill(row, col - 1);
-		floodFill(row, col + 1);
-		floodFill(row + 1, col - 1);
-		floodFill(row - 1, col - 1);
-		floodFill(row + 1, col + 1);
-		floodFill(row - 1, col + 1);
-	}
-}

@@ -273,3 +273,22 @@ void MinesweeperBoard::setDifficulty(GameMode mode)
     setBoard();
     std::cout << "Game mode changed to: " << mode << std::endl;
 }
+
+void MinesweeperBoard::floodFill(int row, int col)
+{
+    if (isOutside(row, col))
+        return;
+
+    if (countMines(row, col) == 0)
+    {
+        revealField(row, col);
+        floodFill(row + 1, col);
+        floodFill(row - 1, col);
+        floodFill(row, col - 1);
+        floodFill(row, col + 1);
+        floodFill(row + 1, col - 1);
+        floodFill(row - 1, col - 1);
+        floodFill(row + 1, col + 1);
+        floodFill(row - 1, col + 1);
+    }
+}
