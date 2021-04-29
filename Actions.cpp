@@ -40,7 +40,6 @@ void Actions::lmbPressed(sf::Event& event) const
     int col = event.mouseButton.x / 40 - 2;
 
     board.floodFill(row, col);
-    board.revealField(row, col);
 }
 
 void Actions::rmbPressed(sf::Event& event) const
