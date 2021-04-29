@@ -45,9 +45,6 @@ public:
 	MinesweeperBoard(int width, int height, GameMode mode);
 	void debugDisplay() const;
 	void setBoard();
-	void revealAmount();
-	void countMoves();
-	void clearMoves();
 	void setDifficulty(GameMode mode);
 	void floodFill(int row, int col);
 	bool hasMine(int row, int col) const;
